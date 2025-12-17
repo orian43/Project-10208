@@ -15,7 +15,7 @@
 
 
     <LinearLayout
-        android:id="@+id/livesRow"
+        android:id="@+id/linLivesRow"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
@@ -42,24 +42,24 @@
 
         <ImageView
             android:id="@+id/imgHeart3"
-            android:layout_width="35dp"
+            android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_marginStart="8dp"
             android:src="@drawable/ic_heart" />
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/meteorArea"
+        android:id="@+id/linMeteorArea"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@id/bottomArea"
-        android:layout_below="@id/livesRow"
+        android:layout_above="@id/linBottomArea"
+        android:layout_below="@id/linLivesRow"
         android:orientation="vertical"
         android:padding="10dp">
 
 
         <LinearLayout
-            android:id="@+id/row0"
+            android:id="@+id/linRow0"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginTop="20dp"
@@ -68,7 +68,7 @@
 
 
             <LinearLayout
-                android:id="@+id/cell_0_0"
+                android:id="@+id/linCell_0_0"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -77,45 +77,14 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/cell_0_1"
+                android:id="@+id/linCell_0_1"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:orientation="horizontal" />
 
             <LinearLayout
-                android:id="@+id/cell_0_2"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:orientation="horizontal" />
-
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/row1"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:orientation="horizontal">
-
-            <LinearLayout
-                android:id="@+id/cell_1_0"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:orientation="horizontal" />
-
-            <LinearLayout
-                android:id="@+id/cell_1_1"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:orientation="horizontal" />
-
-            <LinearLayout
-                android:id="@+id/cell_1_2"
+                android:id="@+id/linCell_0_2"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -125,28 +94,59 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/row2"
+            android:id="@+id/linRow1"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
             android:orientation="horizontal">
 
             <LinearLayout
-                android:id="@+id/cell_2_0"
+                android:id="@+id/linCell_1_0"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:orientation="horizontal" />
 
             <LinearLayout
-                android:id="@+id/cell_2_1"
+                android:id="@+id/linCell_1_1"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:orientation="horizontal" />
 
             <LinearLayout
-                android:id="@+id/cell_2_2"
+                android:id="@+id/linCell_1_2"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="horizontal" />
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linRow2"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:id="@+id/linCell_2_0"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="horizontal" />
+
+            <LinearLayout
+                android:id="@+id/linCell_2_1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="horizontal" />
+
+            <LinearLayout
+                android:id="@+id/linCell_2_2"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -157,28 +157,28 @@
 
 
         <LinearLayout
-            android:id="@+id/row3"
+            android:id="@+id/linRow3"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
             android:orientation="horizontal">
 
             <LinearLayout
-                android:id="@+id/cell_3_0"
+                android:id="@+id/linCell_3_0"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:orientation="horizontal" />
 
             <LinearLayout
-                android:id="@+id/cell_3_1"
+                android:id="@+id/linCell_3_1"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:orientation="horizontal" />
 
             <LinearLayout
-                android:id="@+id/cell_3_2"
+                android:id="@+id/linCell_3_2"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -188,28 +188,28 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/row4"
+            android:id="@+id/linRow4"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
             android:orientation="horizontal">
 
             <LinearLayout
-                android:id="@+id/cell_4_0"
+                android:id="@+id/linCell_4_0"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:orientation="horizontal" />
 
             <LinearLayout
-                android:id="@+id/cell_4_1"
+                android:id="@+id/linCell_4_1"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:orientation="horizontal" />
 
             <LinearLayout
-                android:id="@+id/cell_4_2"
+                android:id="@+id/linCell_4_2"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -222,14 +222,14 @@
 
 
     <LinearLayout
-        android:id="@+id/bottomArea"
+        android:id="@+id/linBottomArea"
         android:layout_width="match_parent"
         android:layout_height="150dp"
         android:layout_alignParentBottom="true"
         android:orientation="vertical">
 
         <LinearLayout
-            android:id="@+id/playerRow"
+            android:id="@+id/linPayerRow"
             android:layout_width="match_parent"
             android:layout_height="100dp"
             android:orientation="horizontal"
@@ -237,21 +237,21 @@
 
 
             <LinearLayout
-                android:id="@+id/playerCell0"
+                android:id="@+id/linPlayerCell0"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:orientation="vertical" />
 
             <LinearLayout
-                android:id="@+id/playerCell1"
+                android:id="@+id/linPlayerCell1"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:orientation="vertical" />
 
             <LinearLayout
-                android:id="@+id/playerCell2"
+                android:id="@+id/linPlayerCell2"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -264,8 +264,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-
-            >
+            android:layout_marginHorizontal="10dp"  >
 
 
             <com.google.android.material.button.MaterialButton
@@ -273,7 +272,8 @@
                 android:layout_width="120dp"
                 android:layout_height="60dp"
                 android:layout_alignParentStart="true"
-                android:text="Left" />
+                android:text="Left"
+                />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnRight"
