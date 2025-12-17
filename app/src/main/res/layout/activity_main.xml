@@ -13,8 +13,7 @@
         android:scaleType="centerCrop"
         android:src="@drawable/img_spack_background" />
 
-
-    <LinearLayout
+      <LinearLayout
         android:id="@+id/linLivesRow"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -284,6 +283,17 @@
         </RelativeLayout>
 
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/tvGameOver"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Game Over!"
+        android:textSize="36sp"
+        android:textColor="@android:color/holo_red_dark"
+        android:layout_centerInParent="true"
+        android:visibility="gone"
+        android:textStyle="bold"/>
 
 </RelativeLayout>
 

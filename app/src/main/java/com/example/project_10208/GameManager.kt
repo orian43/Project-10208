@@ -1,5 +1,6 @@
 package com.example.project_10208
 
+import android.view.View
 import android.widget.LinearLayout
 import android.widget.ImageView
 import android.widget.Toast
@@ -46,7 +47,6 @@ class GameManager(private val activity: AppCompatActivity) {
     }
 
 
-
     fun setup(binding: ActivityMainBinding) {
         this.binding = binding
 
@@ -71,9 +71,13 @@ class GameManager(private val activity: AppCompatActivity) {
 
     fun start() = timer.start()
     fun stop() = timer.stop()
-    fun movePlayerLeft() = playerController.moveLeft()
-    fun movePlayerRight() = playerController.moveRight()
+    fun movePlayerLeft() {
+        if (!gameOver) playerController.moveLeft()
+    }
 
+    fun movePlayerRight() {
+        if (!gameOver) playerController.moveRight()
+    }
 
     private fun updateGame() {
         if (!gameOver) {
@@ -139,7 +143,8 @@ class GameManager(private val activity: AppCompatActivity) {
     }
 
     private fun showGameOver() {
-        Toast.makeText(activity, "Game Over!", Toast.LENGTH_LONG).show()
+        gameOver = true
         stop()
+        binding.tvGameOver.visibility = View.VISIBLE
     }
 }
