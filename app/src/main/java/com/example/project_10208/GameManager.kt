@@ -90,15 +90,16 @@ class GameManager(private val activity: AppCompatActivity) {
         spawnMeteorsOnePerRow()
     }
 
+    private var spawnToggle = false
     private fun spawnMeteorsOnePerRow() {
         val rand = Random()
-        for (r in 0..3) {
-            val rowHasMeteor = grid[r].any { it.childCount > 0 }
-            if (!rowHasMeteor) {
-                val c = rand.nextInt(3)
-                addMeteor(r, c)
-            }
+        val r = 0;
+        val rowHasMeteor = grid[r].any { it.childCount > 0 }
+        if (!rowHasMeteor && spawnToggle) {
+            val c = rand.nextInt(3)
+            addMeteor(r, c)
         }
+        spawnToggle = !spawnToggle
     }
 
     private fun addMeteor(r: Int, c: Int) {
@@ -117,6 +118,9 @@ class GameManager(private val activity: AppCompatActivity) {
                     if (r == 4 && c == playerController.position) {
                         lives--
                         updateHeartsUI()
+                        Vibration.vibrate(activity, 200)
+                        Toast.makeText(activity, "crash!!", Toast.LENGTH_SHORT).show()
+
                         if (lives <= 0) {
                             gameOver = true
                             showGameOver()
@@ -146,5 +150,8 @@ class GameManager(private val activity: AppCompatActivity) {
         gameOver = true
         stop()
         binding.tvGameOver.visibility = View.VISIBLE
+        Vibration.vibrate(activity, 600)
+
+
     }
 }
