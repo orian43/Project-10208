@@ -2,38 +2,43 @@ package com.example.project_10208
 
 import android.view.View
 import android.widget.LinearLayout
-import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.project_10208.databinding.ActivityMainBinding
-import java.util.Random
-import kotlin.ranges.downTo
 
 class GameManager(private val activity: AppCompatActivity) {
 
     private lateinit var binding: ActivityMainBinding
+
+    private val ROWS = 5
+    private val COLUMNS = 3
+
     private val grid: Array<Array<LinearLayout>>
     private val playerController: PlayerController
     private val timer: GameTimer
+
+    private val meteorController: MeteorController
+    private val livesManager: LivesManager
+
 
     private var lives = 3
     private var gameOver = false
 
     init {
-        grid = Array(5) { r ->
-            Array(3) { c ->
+        grid = Array(ROWS) { r ->
+            Array(COLUMNS) { c ->
                 val id = activity.resources.getIdentifier(
                     "linCell_${r}_${c}",
                     "id",
                     activity.packageName
                 )
-                activity.findViewById<LinearLayout>(id)
+                activity.findViewById(id)
             }
         }
 
-        val playerCells = Array(3) { i ->
+        val playerCells = Array(COLUMNS) { i ->
             val id = activity.resources.getIdentifier(
                 "linPlayerCell$i",
                 "id",
@@ -43,9 +48,11 @@ class GameManager(private val activity: AppCompatActivity) {
         }
 
         playerController = PlayerController(activity, playerCells)
+        meteorController = MeteorController(activity, grid)
+        livesManager = LivesManager(activity)
         timer = GameTimer { updateGame() }
-    }
 
+    }
 
     fun setup(binding: ActivityMainBinding) {
         this.binding = binding
@@ -57,16 +64,15 @@ class GameManager(private val activity: AppCompatActivity) {
             insets
         }
 
-
         binding.btnLeft.setOnClickListener { movePlayerLeft() }
         binding.btnRight.setOnClickListener { movePlayerRight() }
     }
 
-
     fun initGame() {
         playerController.placePlayer()
-        spawnInitialMeteors()
-        updateHeartsUI()
+        meteorController.spawnInitialMeteors()
+        livesManager.reset()
+
     }
 
     fun start() = timer.start()
@@ -81,68 +87,22 @@ class GameManager(private val activity: AppCompatActivity) {
 
     private fun updateGame() {
         if (!gameOver) {
-            moveMeteorsDown()
-            spawnMeteorsOnePerRow()
+            val meteorsAtBottom = meteorController.moveMeteorsDown()
+            checkCollisions(meteorsAtBottom)
+            meteorController.spawnMeteorsOnePerRow()
         }
     }
 
-    private fun spawnInitialMeteors() {
-        spawnMeteorsOnePerRow()
-    }
-
-    private var spawnToggle = false
-    private fun spawnMeteorsOnePerRow() {
-        val rand = Random()
-        val r = 0;
-        val rowHasMeteor = grid[r].any { it.childCount > 0 }
-        if (!rowHasMeteor && spawnToggle) {
-            val c = rand.nextInt(3)
-            addMeteor(r, c)
-        }
-        spawnToggle = !spawnToggle
-    }
-
-    private fun addMeteor(r: Int, c: Int) {
-        val meteor = ImageView(activity)
-        meteor.setImageResource(R.drawable.img_meteor)
-        grid[r][c].addView(meteor)
-    }
-
-    private fun moveMeteorsDown() {
-        for (r in 4 downTo 0) {
-            for (c in 0..2) {
-                if (grid[r][c].childCount > 0) {
-                    val meteor = grid[r][c].getChildAt(0)
-                    grid[r][c].removeAllViews()
-
-                    if (r == 4 && c == playerController.position) {
-                        lives--
-                        updateHeartsUI()
-                        Vibration.vibrate(activity, 200)
-                        Toast.makeText(activity, "crash!!", Toast.LENGTH_SHORT).show()
-
-                        if (lives <= 0) {
-                            gameOver = true
-                            showGameOver()
-                        }
-                    } else if (r < 4) {
-                        grid[r + 1][c].addView(meteor)
-                    }
+    private fun checkCollisions(meteorsAtBottom: List<Pair<Int, Int>>) {
+        for ((_, c) in meteorsAtBottom) {
+            if (c == playerController.position) {
+                Vibration.vibrate(activity, 200)
+                Toast.makeText(activity, "crash!!", Toast.LENGTH_SHORT).show()
+                val isGameOver = livesManager.loseLife()
+                if (isGameOver) {
+                    showGameOver()
                 }
             }
-        }
-    }
-
-
-    private fun updateHeartsUI() {
-        val hearts = arrayOf(
-            binding.imgHeart1,
-            binding.imgHeart2,
-            binding.imgHeart3
-        )
-        for (i in hearts.indices) {
-            if (i < lives) hearts[i].setImageResource(R.drawable.ic_heart)
-            else hearts[i].setImageResource(R.drawable.ic_heart_empty)
         }
     }
 
@@ -151,7 +111,6 @@ class GameManager(private val activity: AppCompatActivity) {
         stop()
         binding.tvGameOver.visibility = View.VISIBLE
         Vibration.vibrate(activity, 600)
-
 
     }
 }
