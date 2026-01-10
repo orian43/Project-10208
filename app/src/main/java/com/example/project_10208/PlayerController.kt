@@ -9,7 +9,7 @@ class PlayerController(
     private val playerCells: Array<LinearLayout>
 ) {
 
-    var position = 1
+    var position = playerCells.size / 2
         private set
 
     fun placePlayer() {

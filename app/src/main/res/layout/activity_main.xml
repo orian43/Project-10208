@@ -88,6 +88,18 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:orientation="horizontal" />
+            <LinearLayout
+                android:id="@+id/linCell_0_3"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="horizontal" />
+            <LinearLayout
+                android:id="@+id/linCell_0_4"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="horizontal" />
 
 
         </LinearLayout>
@@ -115,6 +127,18 @@
 
             <LinearLayout
                 android:id="@+id/linCell_1_2"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="horizontal" />
+            <LinearLayout
+                android:id="@+id/linCell_1_3"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="horizontal" />
+            <LinearLayout
+                android:id="@+id/linCell_1_4"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -150,6 +174,19 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:orientation="horizontal" />
+            <LinearLayout
+                android:id="@+id/linCell_2_3"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="horizontal" />
+            <LinearLayout
+                android:id="@+id/linCell_2_4"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="horizontal" />
+
 
 
         </LinearLayout>
@@ -182,6 +219,19 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:orientation="horizontal" />
+            <LinearLayout
+                android:id="@+id/linCell_3_3"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="horizontal" />
+            <LinearLayout
+                android:id="@+id/linCell_3_4"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="horizontal" />
+
 
 
         </LinearLayout>
@@ -209,6 +259,18 @@
 
             <LinearLayout
                 android:id="@+id/linCell_4_2"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="horizontal" />
+            <LinearLayout
+                android:id="@+id/linCell_4_3"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="horizontal" />
+            <LinearLayout
+                android:id="@+id/linCell_4_4"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -251,6 +313,18 @@
 
             <LinearLayout
                 android:id="@+id/linPlayerCell2"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical" />
+            <LinearLayout
+                android:id="@+id/linPlayerCell3"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical" />
+            <LinearLayout
+                android:id="@+id/linPlayerCell4"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
