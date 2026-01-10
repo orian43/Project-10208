@@ -6,7 +6,7 @@ import android.widget.ImageView
 
 class LivesManager(private val activity: Activity) {
 
-    private var lives = 3
+    private var lives = GameConfig.INITIAL_LIVES
 
     private val hearts: Array<ImageView> = arrayOf(
         activity.findViewById(R.id.imgHeart1),
@@ -15,7 +15,7 @@ class LivesManager(private val activity: Activity) {
     )
 
     fun reset() {
-        lives = 3
+        lives = GameConfig.INITIAL_LIVES
         updateUI()
     }
 
