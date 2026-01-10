@@ -52,7 +52,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@id/linBottomArea"
-        android:layout_below="@id/linLivesRow"
         android:orientation="vertical"
         android:padding="10dp">
 
