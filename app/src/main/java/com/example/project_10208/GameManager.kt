@@ -19,6 +19,7 @@ class GameManager(private val activity: AppCompatActivity) {
 
     private val meteorController: MeteorController
     private val livesManager: LivesManager
+    private val distanceManager: DistanceManager
 
 
     private var lives = 3
@@ -48,6 +49,7 @@ class GameManager(private val activity: AppCompatActivity) {
         playerController = PlayerController(activity, playerCells)
         meteorController = MeteorController(activity, grid)
         livesManager = LivesManager(activity)
+        distanceManager = DistanceManager(activity)
         timer = GameTimer { updateGame() }
 
     }
@@ -70,6 +72,7 @@ class GameManager(private val activity: AppCompatActivity) {
         playerController.placePlayer()
         meteorController.spawnInitialMeteors()
         livesManager.reset()
+        distanceManager.reset()
 
     }
 
@@ -85,6 +88,7 @@ class GameManager(private val activity: AppCompatActivity) {
 
     private fun updateGame() {
         if (!gameOver) {
+            distanceManager.increaseDistance()
             val meteorsAtBottom = meteorController.moveMeteorsDown()
             checkCollisions(meteorsAtBottom)
             meteorController.spawnMeteorsOnePerRow()
