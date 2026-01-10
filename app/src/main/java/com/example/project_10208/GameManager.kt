@@ -12,11 +12,9 @@ class GameManager(private val activity: AppCompatActivity) {
 
     private lateinit var binding: ActivityMainBinding
 
-    private val ROWS = 5
-    private val COLUMNS = 3
-
     private val grid: Array<Array<LinearLayout>>
     private val playerController: PlayerController
+
     private val timer: GameTimer
 
     private val meteorController: MeteorController
@@ -27,8 +25,8 @@ class GameManager(private val activity: AppCompatActivity) {
     private var gameOver = false
 
     init {
-        grid = Array(ROWS) { r ->
-            Array(COLUMNS) { c ->
+        grid = Array(GameConfig.ROWS) { r ->
+            Array(GameConfig.COLS) { c ->
                 val id = activity.resources.getIdentifier(
                     "linCell_${r}_${c}",
                     "id",
@@ -38,7 +36,7 @@ class GameManager(private val activity: AppCompatActivity) {
             }
         }
 
-        val playerCells = Array(COLUMNS) { i ->
+        val playerCells = Array(GameConfig.COLS) { i ->
             val id = activity.resources.getIdentifier(
                 "linPlayerCell$i",
                 "id",
