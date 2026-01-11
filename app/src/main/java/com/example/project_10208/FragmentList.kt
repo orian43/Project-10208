@@ -28,7 +28,9 @@ class FragmentList : Fragment() {
 
         scores.forEachIndexed { index, score ->
             val button = MaterialButton(requireContext())
-            button.text = "${index + 1}. Score: ${score.score}"
+
+            button.text = "${index + 1}. Dist: ${score.score} m | Coins: ${score.coins}"
+
             button.setOnClickListener {
                 callback?.onScoreClicked(score.lat, score.lon)
             }

@@ -19,15 +19,19 @@ class GameManager(private val activity: AppCompatActivity) {
     private val livesManager: LivesManager
     private val distanceManager: DistanceManager
     private val coinController: CoinController
+    private val scoreManager: ScoreManager
+
     private var tiltDetector: TiltDetector? = null
     private var gameMode: String = GameConfig.MODE_BUTTONS
     private var gameSpeed: Long = GameConfig.SPEED_SLOW
-    private val scoreManager = ScoreManager(activity)
 
     private var lives = GameConfig.INITIAL_LIVES
     private var gameOver = false
 
     init {
+
+        scoreManager = ScoreManager(activity)
+
         grid = Array(GameConfig.ROWS) { r ->
             Array(GameConfig.COLS) { c ->
                 val id = activity.resources.getIdentifier(
@@ -52,10 +56,10 @@ class GameManager(private val activity: AppCompatActivity) {
         meteorController = MeteorController(activity, grid)
         livesManager = LivesManager(activity)
         timer = GameTimer { updateGame() }
-        coinController = CoinController(activity, grid){ newCount -> updateCoinText(newCount)}
+        coinController = CoinController(activity, grid) { newCount -> updateCoinText(newCount) }
         distanceManager = DistanceManager { newDistance ->
-            updateDistanceText(newDistance)}
-
+            updateDistanceText(newDistance)
+        }
     }
 
     fun setup(binding: ActivityMainBinding, mode: String, speed: Long) {
@@ -76,7 +80,7 @@ class GameManager(private val activity: AppCompatActivity) {
 
     private fun setupControls() {
         if (gameMode == GameConfig.MODE_SENSORS) {
-       //Hiding the buttons
+            // Hiding the buttons
             binding.btnLeft.visibility = View.INVISIBLE
             binding.btnRight.visibility = View.INVISIBLE
 
@@ -85,13 +89,14 @@ class GameManager(private val activity: AppCompatActivity) {
                 if (isRight) movePlayerRight() else movePlayerLeft()
             }
         } else {
-            //Normal button mode
+            // Normal button mode
             binding.btnLeft.visibility = View.VISIBLE
             binding.btnRight.visibility = View.VISIBLE
             binding.btnLeft.setOnClickListener { movePlayerLeft() }
             binding.btnRight.setOnClickListener { movePlayerRight() }
         }
     }
+
     fun initGame() {
         playerController.placePlayer()
         meteorController.spawnInitialMeteors()
@@ -103,17 +108,18 @@ class GameManager(private val activity: AppCompatActivity) {
         if (::binding.isInitialized) {
             binding.tvGameOver.visibility = View.GONE
         }
-
     }
 
     fun start() {
         timer.start()
         tiltDetector?.start()
     }
+
     fun stop() {
         timer.stop()
         tiltDetector?.stop()
     }
+
     fun movePlayerLeft() {
         if (!gameOver) playerController.moveLeft()
     }
@@ -131,7 +137,6 @@ class GameManager(private val activity: AppCompatActivity) {
             checkCoinCollection(coinsAtBottom)
             meteorController.spawnMeteorsOnePerRow()
             coinController.spawnCoin()
-
         }
     }
 
@@ -139,7 +144,7 @@ class GameManager(private val activity: AppCompatActivity) {
         for ((_, c) in meteorsAtBottom) {
             if (c == playerController.position) {
                 Vibration.vibrate(activity, 200)
-                Toast.makeText(activity, "crash!!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(activity, "Crash!!", Toast.LENGTH_SHORT).show()
                 val isGameOver = livesManager.loseLife()
                 if (isGameOver) {
                     showGameOver()
@@ -147,38 +152,45 @@ class GameManager(private val activity: AppCompatActivity) {
             }
         }
     }
+
     private fun updateDistanceText(distance: Int) {
-        // Check that binding has been initialized (to prevent a crash)
         if (::binding.isInitialized) {
             binding.tvDistance.text = "Distance: $distance m"
         }
     }
 
     private fun updateCoinText(count: Int) {
-        // Check that binding has been initialized (to prevent a crash)
         if (::binding.isInitialized) {
             binding.tvCoins.text = "Coins: $count"
         }
     }
+
     private fun checkCoinCollection(coinsAtBottom: List<Pair<Int, Int>>) {
         for ((_, c) in coinsAtBottom) {
             if (c == playerController.position) {
-               coinController.coinCollected()
+                coinController.coinCollected()
             }
         }
     }
+
+
     private fun showGameOver() {
         gameOver = true
         stop()
 
         val finalDistance = distanceManager.getDistance()
+        val finalCoins = coinController.getCoinsCount()
 
-        val score = finalDistance
-        scoreManager.saveScore(score, 32.0853, 34.8854)
+        // Saving to the highscore table
+        scoreManager.saveScore(finalDistance, finalCoins, 32.0853, 34.8854)
 
         binding.tvGameOver.visibility = View.VISIBLE
         Vibration.vibrate(activity, 600)
 
-
-        Toast.makeText(activity, "Distance of $score saved to High Scores!", Toast.LENGTH_SHORT).show()    }
+        Toast.makeText(
+            activity,
+            "Game Over! Distance: $finalDistance m, Coins: $finalCoins",
+            Toast.LENGTH_LONG
+        ).show()
+    }
 }

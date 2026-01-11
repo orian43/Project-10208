@@ -10,10 +10,10 @@ class ScoreManager(private val context: Context) {
     private val SP_KEY_SCORES = "SCORES"
     private val gson = Gson()
 
-    fun saveScore(newScore: Int, lat: Double, lon: Double) {
+    fun saveScore(newScore: Int, newCoins: Int, lat: Double, lon: Double) {
         val scores = getAllScores().toMutableList()
-        scores.add(Score(newScore, lat, lon))
-
+        scores.add(Score(newScore, newCoins, lat, lon))
+        
         // Sort in descending order and keep only the top 10
         scores.sortByDescending { it.score }
         if (scores.size > 10) {
