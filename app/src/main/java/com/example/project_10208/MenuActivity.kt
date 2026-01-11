@@ -17,6 +17,7 @@ class MenuActivity : AppCompatActivity() {
         val btnHighScores = findViewById<MaterialButton>(R.id.btnHighScores)
 
 
+
         btnSlow.setOnClickListener {
             startGame(GameConfig.SPEED_SLOW, GameConfig.MODE_BUTTONS)
         }
@@ -29,6 +30,11 @@ class MenuActivity : AppCompatActivity() {
 
         btnSensor.setOnClickListener {
             startGame(GameConfig.SPEED_SLOW, GameConfig.MODE_SENSORS)
+        }
+
+        btnHighScores.setOnClickListener {
+            val intent = Intent(this, HighScoresActivity::class.java)
+            startActivity(intent)
         }
     }
 

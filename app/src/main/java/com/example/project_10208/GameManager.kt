@@ -22,7 +22,7 @@ class GameManager(private val activity: AppCompatActivity) {
     private var tiltDetector: TiltDetector? = null
     private var gameMode: String = GameConfig.MODE_BUTTONS
     private var gameSpeed: Long = GameConfig.SPEED_SLOW
-
+    private val scoreManager = ScoreManager(activity)
 
     private var lives = GameConfig.INITIAL_LIVES
     private var gameOver = false
@@ -170,10 +170,15 @@ class GameManager(private val activity: AppCompatActivity) {
     private fun showGameOver() {
         gameOver = true
         stop()
-        val finalCoins = coinController.getCoinsCount()
+
         val finalDistance = distanceManager.getDistance()
+
+        val score = finalDistance
+        scoreManager.saveScore(score, 32.0853, 34.8854)
+
         binding.tvGameOver.visibility = View.VISIBLE
         Vibration.vibrate(activity, 600)
 
-    }
+
+        Toast.makeText(activity, "Distance of $score saved to High Scores!", Toast.LENGTH_SHORT).show()    }
 }
