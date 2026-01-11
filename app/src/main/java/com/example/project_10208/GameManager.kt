@@ -99,9 +99,11 @@ class GameManager(private val activity: AppCompatActivity) {
 
             tiltDetector = TiltDetector(activity, object : TiltCallback {
                 override fun onSensorEvent(x: Float, y: Float, z: Float) {
-                    checkSensorLogic(x)
+                    checkSensorLogic(x, y)
                 }
             })
+
+
         } else {
             // Button mode: Displaying buttons and defining clicks
             binding.btnLeft.visibility = View.VISIBLE
@@ -112,9 +114,9 @@ class GameManager(private val activity: AppCompatActivity) {
     }
 
 
-    private fun checkSensorLogic(x: Float) {
+    private fun checkSensorLogic(x: Float, y: Float) {
+        // --- לוגיקה של תזוזה לצדדים (X) ---
         val currentTime = System.currentTimeMillis()
-
         if (currentTime - lastUpdate > MOVE_DELAY) {
             if (x > 3.0) {
                 movePlayerLeft()
@@ -123,6 +125,17 @@ class GameManager(private val activity: AppCompatActivity) {
                 movePlayerRight()
                 lastUpdate = currentTime
             }
+        }
+
+        val newSpeed = when {
+            y < -3.0 -> GameConfig.SPEED_FAST
+            y > 3.0 -> GameConfig.SPEED_SLOW + 200
+            else -> GameConfig.SPEED_SLOW
+        }
+
+        if (gameSpeed != newSpeed) {
+            gameSpeed = newSpeed
+            timer.setDelay(gameSpeed)
         }
     }
 
