@@ -17,8 +17,11 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        val speed = intent.getLongExtra(GameConfig.EXTRA_SPEED, GameConfig.SPEED_SLOW)
+        val mode = intent.getStringExtra(GameConfig.EXTRA_MODE) ?: GameConfig.MODE_BUTTONS
+
         gameManager = GameManager(this)
-        gameManager.setup(binding)
+        gameManager.setup(binding, mode, speed)
         gameManager.initGame()
     }
 

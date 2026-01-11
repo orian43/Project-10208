@@ -4,7 +4,7 @@ import android.os.Handler
 import android.os.Looper
 
 class GameTimer(
-    private val delay: Long = 1000,
+    private var delay: Long = 1000, //var instead of val to allow modification
     private val onTick: () -> Unit
 ) {
     private val handler = Handler(Looper.getMainLooper())
@@ -15,7 +15,11 @@ class GameTimer(
         }
     }
 
+    fun setDelay(newDelay: Long) {
+        this.delay = newDelay
+    }
     fun start() {
+        handler.removeCallbacks(runnable)
         handler.postDelayed(runnable, delay)
     }
 

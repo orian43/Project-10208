@@ -19,9 +19,12 @@ class GameManager(private val activity: AppCompatActivity) {
     private val livesManager: LivesManager
     private val distanceManager: DistanceManager
     private val coinController: CoinController
+    private var tiltDetector: TiltDetector? = null
+    private var gameMode: String = GameConfig.MODE_BUTTONS
+    private var gameSpeed: Long = GameConfig.SPEED_SLOW
 
 
-    private var lives = 3
+    private var lives = GameConfig.INITIAL_LIVES
     private var gameOver = false
 
     init {
@@ -55,9 +58,12 @@ class GameManager(private val activity: AppCompatActivity) {
 
     }
 
-    fun setup(binding: ActivityMainBinding) {
+    fun setup(binding: ActivityMainBinding, mode: String, speed: Long) {
         this.binding = binding
+        this.gameMode = mode
+        this.gameSpeed = speed
 
+        timer.setDelay(gameSpeed)
 
         ViewCompat.setOnApplyWindowInsetsListener(binding.main) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -65,21 +71,49 @@ class GameManager(private val activity: AppCompatActivity) {
             insets
         }
 
-        binding.btnLeft.setOnClickListener { movePlayerLeft() }
-        binding.btnRight.setOnClickListener { movePlayerRight() }
+        setupControls()
     }
 
+    private fun setupControls() {
+        if (gameMode == GameConfig.MODE_SENSORS) {
+       //Hiding the buttons
+            binding.btnLeft.visibility = View.INVISIBLE
+            binding.btnRight.visibility = View.INVISIBLE
+
+            // Tilt detector initialization
+            tiltDetector = TiltDetector(activity) { isRight ->
+                if (isRight) movePlayerRight() else movePlayerLeft()
+            }
+        } else {
+            //Normal button mode
+            binding.btnLeft.visibility = View.VISIBLE
+            binding.btnRight.visibility = View.VISIBLE
+            binding.btnLeft.setOnClickListener { movePlayerLeft() }
+            binding.btnRight.setOnClickListener { movePlayerRight() }
+        }
+    }
     fun initGame() {
         playerController.placePlayer()
         meteorController.spawnInitialMeteors()
         livesManager.reset()
         distanceManager.reset()
         coinController.reset()
+        gameOver = false
+
+        if (::binding.isInitialized) {
+            binding.tvGameOver.visibility = View.GONE
+        }
 
     }
 
-    fun start() = timer.start()
-    fun stop() = timer.stop()
+    fun start() {
+        timer.start()
+        tiltDetector?.start()
+    }
+    fun stop() {
+        timer.stop()
+        tiltDetector?.stop()
+    }
     fun movePlayerLeft() {
         if (!gameOver) playerController.moveLeft()
     }
