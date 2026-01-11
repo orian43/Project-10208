@@ -13,6 +13,7 @@ class MeteorController(
     private var spawnToggle = false
     private val random = Random()
 
+
     fun spawnInitialMeteors() {
         spawnMeteorsOnePerRow()
     }
@@ -29,8 +30,9 @@ class MeteorController(
     }
 
     private fun addMeteor(r: Int, c: Int) {
-        val meteor = ImageView(context)
+         val meteor = ImageView(context)
         meteor.setImageResource(R.drawable.img_meteor)
+        meteor.tag = "METEOR"
         grid[r][c].addView(meteor)
     }
 
@@ -39,7 +41,7 @@ class MeteorController(
 
         for (r in 4 downTo 0) {
             for (c in grid[r].indices) {
-                if (grid[r][c].childCount > 0) {
+                if (grid[r][c].childCount > 0 && grid[r][c].getChildAt(0).tag == "METEOR") {
                     val meteor = grid[r][c].getChildAt(0)
                     grid[r][c].removeAllViews()
 

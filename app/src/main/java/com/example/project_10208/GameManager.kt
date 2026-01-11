@@ -14,12 +14,11 @@ class GameManager(private val activity: AppCompatActivity) {
 
     private val grid: Array<Array<LinearLayout>>
     private val playerController: PlayerController
-
     private val timer: GameTimer
-
     private val meteorController: MeteorController
     private val livesManager: LivesManager
     private val distanceManager: DistanceManager
+    private val coinController: CoinController
 
 
     private var lives = 3
@@ -51,6 +50,7 @@ class GameManager(private val activity: AppCompatActivity) {
         livesManager = LivesManager(activity)
         distanceManager = DistanceManager(activity)
         timer = GameTimer { updateGame() }
+        coinController = CoinController(activity, grid)
 
     }
 
@@ -73,6 +73,7 @@ class GameManager(private val activity: AppCompatActivity) {
         meteorController.spawnInitialMeteors()
         livesManager.reset()
         distanceManager.reset()
+        coinController.reset()
 
     }
 
@@ -90,8 +91,12 @@ class GameManager(private val activity: AppCompatActivity) {
         if (!gameOver) {
             distanceManager.increaseDistance()
             val meteorsAtBottom = meteorController.moveMeteorsDown()
+            val coinsAtBottom = coinController.moveCoinsDown()
             checkCollisions(meteorsAtBottom)
+            checkCoinCollection(coinsAtBottom)
             meteorController.spawnMeteorsOnePerRow()
+            coinController.spawnCoin()
+
         }
     }
 
@@ -108,9 +113,18 @@ class GameManager(private val activity: AppCompatActivity) {
         }
     }
 
+    private fun checkCoinCollection(coinsAtBottom: List<Pair<Int, Int>>) {
+        for ((_, c) in coinsAtBottom) {
+            if (c == playerController.position) {
+                val currentCoins = coinController.coinCollected()
+                Toast.makeText(activity, "Coins: $currentCoins", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
     private fun showGameOver() {
         gameOver = true
         stop()
+        val finalCoins = coinController.getCoinsCount()
         binding.tvGameOver.visibility = View.VISIBLE
         Vibration.vibrate(activity, 600)
 

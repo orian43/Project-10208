@@ -12,13 +12,15 @@ class DistanceManager(private val activity: Activity) {
         distance = 0
         updateUI()
     }
-
+    fun getDistance(): Int {
+        return distance
+    }
     fun increaseDistance() {
         distance++
         updateUI()
     }
 
     private fun updateUI() {
-       tvDistance.text = distance.toString()
+        tvDistance.text = "Distance: $distance m"
     }
 }

@@ -13,24 +13,42 @@
         android:scaleType="centerCrop"
         android:src="@drawable/img_spack_background" />
     <LinearLayout
-        android:id="@+id/Odometer"
+        android:id="@+id/linScoreArea"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
         android:layout_marginTop="20dp"
         android:layout_marginStart="20dp"
-        android:orientation="horizontal"
+        android:orientation="vertical"
         android:padding="8dp">
 
         <TextView
             android:id="@+id/tvDistance"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="000"
+            android:text="Distance: 0 m"
             android:textColor="@android:color/white"
-            android:textSize="24sp"
-            android:textStyle="bold" />
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:shadowColor="#000000"
+            android:shadowDx="2"
+            android:shadowDy="2"
+            android:shadowRadius="2"/>
 
+        <TextView
+            android:id="@+id/tvCoins"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="Coins: 0"
+            android:textColor="#FFD700"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:shadowColor="#000000"
+            android:shadowDx="2"
+            android:shadowDy="2"
+            android:shadowRadius="2"/>
     </LinearLayout>
 
       <LinearLayout
