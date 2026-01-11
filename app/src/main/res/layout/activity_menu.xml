@@ -25,9 +25,15 @@
         android:textSize="48sp"
         android:textStyle="bold"
         android:shadowColor="#000000"
-        android:shadowDx="4"
-        android:shadowDy="4"
         android:shadowRadius="8" />
+
+    <ImageView
+        android:id="@+id/imgLogo"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="20dp"
+        android:src="@drawable/img_icon" />
 
     <LinearLayout
         android:id="@+id/linButtons"

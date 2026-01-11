@@ -16,6 +16,7 @@
         android:supportsRtl="false"
         android:theme="@style/Theme.Project10208">
 
+
         <activity
             android:name=".MenuActivity"
             android:exported="true">
