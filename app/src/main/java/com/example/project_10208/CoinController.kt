@@ -43,7 +43,7 @@ class CoinController(
 
     private fun addCoin(r: Int, c: Int) {
         val coin = ImageView(context)
-        coin.setImageResource(R.drawable.img_coin)
+        coin.setImageResource(R.drawable.ic_coin)
         coin.tag = "COIN"
         grid[r][c].addView(coin)
     }
