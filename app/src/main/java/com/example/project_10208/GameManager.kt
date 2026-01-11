@@ -9,9 +9,7 @@ import androidx.core.view.WindowInsetsCompat
 import com.example.project_10208.databinding.ActivityMainBinding
 
 class GameManager(private val activity: AppCompatActivity) {
-
     private lateinit var binding: ActivityMainBinding
-
     private val grid: Array<Array<LinearLayout>>
     private val playerController: PlayerController
     private val timer: GameTimer
