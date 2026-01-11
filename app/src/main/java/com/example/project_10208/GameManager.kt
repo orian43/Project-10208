@@ -31,6 +31,13 @@ class GameManager(private val activity: AppCompatActivity) {
     private var gameOver = false
 
     init {
+        SoundEffectPlayer.init(activity)
+        try {
+            SoundEffectPlayer.load(activity, R.raw.snd_crash)
+            SoundEffectPlayer.load(activity, R.raw.snd_coin)
+        } catch (e: Exception) {
+
+        }
 
         scoreManager = ScoreManager(activity)
 
@@ -165,6 +172,7 @@ class GameManager(private val activity: AppCompatActivity) {
     private fun checkCollisions(meteorsAtBottom: List<Pair<Int, Int>>) {
         for ((_, c) in meteorsAtBottom) {
             if (c == playerController.position) {
+                SoundEffectPlayer.play(R.raw.snd_crash)
                 Vibration.vibrate(activity, 200)
                 Toast.makeText(activity, "Crash!!", Toast.LENGTH_SHORT).show()
                 val isGameOver = livesManager.loseLife()
@@ -190,10 +198,12 @@ class GameManager(private val activity: AppCompatActivity) {
     private fun checkCoinCollection(coinsAtBottom: List<Pair<Int, Int>>) {
         for ((_, c) in coinsAtBottom) {
             if (c == playerController.position) {
+                SoundEffectPlayer.play(R.raw.snd_coin)
                 coinController.coinCollected()
             }
         }
     }
+
 
     private fun showGameOver() {
         gameOver = true
