@@ -8,7 +8,7 @@ import java.util.Random
 class CoinController(
     private val context: Context,
     private val grid: Array<Array<LinearLayout>>,
-    //private val onCoinUpdate: (Int) -> Unit
+    private val onCoinUpdate: (Int) -> Unit
 
     ) {
     private val random = Random()
@@ -16,13 +16,13 @@ class CoinController(
 
     fun reset() {
         coinsCount = 0
-        //onCoinUpdate(coinsCount)
+        onCoinUpdate(coinsCount)
 
     }
 
     fun coinCollected(): Int {
         coinsCount++
-       // onCoinUpdate(coinsCount)
+       onCoinUpdate(coinsCount)
         return coinsCount
     }
     fun getCoinsCount(): Int {

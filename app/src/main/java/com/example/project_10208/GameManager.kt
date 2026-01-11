@@ -48,9 +48,10 @@ class GameManager(private val activity: AppCompatActivity) {
         playerController = PlayerController(activity, playerCells)
         meteorController = MeteorController(activity, grid)
         livesManager = LivesManager(activity)
-        distanceManager = DistanceManager(activity)
         timer = GameTimer { updateGame() }
-        coinController = CoinController(activity, grid)
+        coinController = CoinController(activity, grid){ newCount -> updateCoinText(newCount)}
+        distanceManager = DistanceManager { newDistance ->
+            updateDistanceText(newDistance)}
 
     }
 
@@ -112,12 +113,23 @@ class GameManager(private val activity: AppCompatActivity) {
             }
         }
     }
+    private fun updateDistanceText(distance: Int) {
+        // Check that binding has been initialized (to prevent a crash)
+        if (::binding.isInitialized) {
+            binding.tvDistance.text = "Distance: $distance m"
+        }
+    }
 
+    private fun updateCoinText(count: Int) {
+        // Check that binding has been initialized (to prevent a crash)
+        if (::binding.isInitialized) {
+            binding.tvCoins.text = "Coins: $count"
+        }
+    }
     private fun checkCoinCollection(coinsAtBottom: List<Pair<Int, Int>>) {
         for ((_, c) in coinsAtBottom) {
             if (c == playerController.position) {
-                val currentCoins = coinController.coinCollected()
-                Toast.makeText(activity, "Coins: $currentCoins", Toast.LENGTH_SHORT).show()
+               coinController.coinCollected()
             }
         }
     }
@@ -125,6 +137,7 @@ class GameManager(private val activity: AppCompatActivity) {
         gameOver = true
         stop()
         val finalCoins = coinController.getCoinsCount()
+        val finalDistance = distanceManager.getDistance()
         binding.tvGameOver.visibility = View.VISIBLE
         Vibration.vibrate(activity, 600)
 
