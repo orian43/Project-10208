@@ -13,19 +13,21 @@ class ScoreManager(private val context: Context) {
     fun saveScore(newScore: Int, newCoins: Int, lat: Double, lon: Double) {
         val scores = getAllScores().toMutableList()
         scores.add(Score(newScore, newCoins, lat, lon))
-        
-        // Sort in descending order and keep only the top 10
+
         scores.sortByDescending { it.score }
+
         if (scores.size > 10) {
-            scores.removeAt(scores.size - 1)
+            scores.subList(10, scores.size).clear()
         }
 
         saveListToSP(scores)
     }
 
+
     fun getAllScores(): List<Score> {
         val sharedPreferences = context.getSharedPreferences(SP_FILE, Context.MODE_PRIVATE)
         val json = sharedPreferences.getString(SP_KEY_SCORES, null)
+
         return if (json == null) {
             emptyList()
         } else {
@@ -33,6 +35,7 @@ class ScoreManager(private val context: Context) {
             gson.fromJson(json, type)
         }
     }
+
 
     private fun saveListToSP(list: List<Score>) {
         val json = gson.toJson(list)
