@@ -36,11 +36,10 @@ class GameManager(private val activity: AppCompatActivity) {
             SoundEffectPlayer.load(activity, R.raw.snd_crash)
             SoundEffectPlayer.load(activity, R.raw.snd_coin)
         } catch (e: Exception) {
-
+            e.printStackTrace()
         }
 
         scoreManager = ScoreManager(activity)
-
 
         grid = Array(GameConfig.ROWS) { r ->
             Array(GameConfig.COLS) { c ->
@@ -53,7 +52,6 @@ class GameManager(private val activity: AppCompatActivity) {
             }
         }
 
-
         val playerCells = Array(GameConfig.COLS) { i ->
             val id = activity.resources.getIdentifier(
                 "linPlayerCell$i",
@@ -63,12 +61,34 @@ class GameManager(private val activity: AppCompatActivity) {
             activity.findViewById<LinearLayout>(id)
         }
 
-
         playerController = PlayerController(activity, playerCells)
         meteorController = MeteorController(activity, grid)
         livesManager = LivesManager(activity)
         timer = GameTimer { updateGame() }
-        coinController = CoinController(activity, grid) { newCount -> updateCoinText(newCount) }
+
+        coinController = CoinController(
+            activity,
+            grid,
+            onCoinCollected = { newCount -> updateCoinText(newCount) },
+            placeCoin = { cell ->
+                cell.gravity = android.view.Gravity.CENTER
+
+                val coinView = android.widget.ImageView(activity)
+                coinView.setImageResource(R.drawable.ic_coin)
+                coinView.scaleType = android.widget.ImageView.ScaleType.FIT_CENTER
+                coinView.adjustViewBounds = true
+
+                val params = LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.MATCH_PARENT
+                )
+
+                coinView.layoutParams = params
+                cell.addView(coinView)
+                cell.tag = "COIN"
+            }
+        )
+
         distanceManager = DistanceManager { newDistance ->
             updateDistanceText(newDistance)
         }
@@ -93,7 +113,6 @@ class GameManager(private val activity: AppCompatActivity) {
 
     private fun setupControls() {
         if (gameMode == GameConfig.MODE_SENSORS) {
-            // Sensor Mode: Hiding Buttons and Enabling Sensor
             binding.btnLeft.visibility = View.INVISIBLE
             binding.btnRight.visibility = View.INVISIBLE
 
@@ -102,10 +121,7 @@ class GameManager(private val activity: AppCompatActivity) {
                     checkSensorLogic(x, y)
                 }
             })
-
-
         } else {
-            // Button mode: Displaying buttons and defining clicks
             binding.btnLeft.visibility = View.VISIBLE
             binding.btnRight.visibility = View.VISIBLE
             binding.btnLeft.setOnClickListener { movePlayerLeft() }
@@ -115,7 +131,6 @@ class GameManager(private val activity: AppCompatActivity) {
 
 
     private fun checkSensorLogic(x: Float, y: Float) {
-        // --- לוגיקה של תזוזה לצדדים (X) ---
         val currentTime = System.currentTimeMillis()
         if (currentTime - lastUpdate > MOVE_DELAY) {
             if (x > 3.0) {
@@ -225,7 +240,6 @@ class GameManager(private val activity: AppCompatActivity) {
         val finalDistance = distanceManager.getDistance()
         val finalCoins = coinController.getCoinsCount()
 
-        // Saving data in the record table
         scoreManager.saveScore(finalDistance, finalCoins, 32.0853, 34.8854)
 
         binding.tvGameOver.visibility = View.VISIBLE

@@ -1,71 +1,75 @@
 package com.example.project_10208
 
-import android.content.Context
-import android.widget.ImageView
 import android.widget.LinearLayout
+import androidx.appcompat.app.AppCompatActivity
 import java.util.Random
 
 class CoinController(
-    private val context: Context,
+    private val activity: AppCompatActivity,
     private val grid: Array<Array<LinearLayout>>,
-    private val onCoinUpdate: (Int) -> Unit
-
-    ) {
+    private val onCoinCollected: (Int) -> Unit,
+    private val placeCoin: (LinearLayout) -> Unit
+) {
     private val random = Random()
     private var coinsCount = 0
 
-    fun reset() {
-        coinsCount = 0
-        onCoinUpdate(coinsCount)
-
-    }
-
-    fun coinCollected(): Int {
-        coinsCount++
-       onCoinUpdate(coinsCount)
-        return coinsCount
-    }
-    fun getCoinsCount(): Int {
-        return coinsCount
-    }
-
     fun spawnCoin() {
-        //coin is only created 30% of the times the function is called, so as not to clutter the screen
         if (random.nextInt(100) < 30) {
             val r = 0
             val c = random.nextInt(GameConfig.COLS)
-            //Check if the cell is completely empty (there is no meteor in it)
-            if (grid[r][c].childCount == 0) {
-                addCoin(r, c)
+            val cell = grid[r][c]
+
+            if (cell.childCount == 0) {
+                placeCoin(cell)
             }
         }
-    }
-
-    private fun addCoin(r: Int, c: Int) {
-        val coin = ImageView(context)
-        coin.setImageResource(R.drawable.ic_coin)
-        coin.tag = "COIN"
-        grid[r][c].addView(coin)
     }
 
     fun moveCoinsDown(): List<Pair<Int, Int>> {
         val coinsAtBottom = mutableListOf<Pair<Int, Int>>()
 
         for (r in GameConfig.ROWS - 1 downTo 0) {
-            for (c in grid[r].indices) {
-                // Only move if it's really a coin
-                if (grid[r][c].childCount > 0 && grid[r][c].getChildAt(0).tag == "COIN") {
-                    val coin = grid[r][c].getChildAt(0)
-                    grid[r][c].removeAllViews()
+            for (c in 0 until GameConfig.COLS) {
+                val cell = grid[r][c]
 
-                    if (r == GameConfig.ROWS - 1) {
-                        coinsAtBottom.add(Pair(r, c))
+                if (cell.childCount > 0 && cell.tag == "COIN") {
+                    val view = cell.getChildAt(0)
+                    cell.removeView(view)
+
+                    if (r + 1 < GameConfig.ROWS) {
+                        val nextCell = grid[r + 1][c]
+                        if (nextCell.childCount == 0) {
+                            nextCell.addView(view)
+                            nextCell.tag = "COIN"
+                        }
                     } else {
-                        grid[r + 1][c].addView(coin)
+                        coinsAtBottom.add(Pair(r, c))
                     }
                 }
             }
         }
         return coinsAtBottom
+    }
+
+    fun coinCollected() {
+        coinsCount++
+        onCoinCollected(coinsCount)
+    }
+
+    fun getCoinsCount(): Int {
+        return coinsCount
+    }
+
+    fun reset() {
+        coinsCount = 0
+        onCoinCollected(0)
+        for (row in grid) {
+            for (cell in row) {
+                if (cell.tag == "COIN") {
+                    cell.removeAllViews()
+                    cell.tag = null
+                }
+            }
+        }
     }
 }

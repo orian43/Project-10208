@@ -25,13 +25,13 @@ class MainActivity : AppCompatActivity() {
         gameManager.initGame()
     }
 
-    override fun onStart() {
-        super.onStart()
+    override fun onResume() {
+        super.onResume()
         gameManager.start()
     }
 
-    override fun onStop() {
-        super.onStop()
+    override fun onPause() {
+        super.onPause()
         gameManager.stop()
     }
 }
