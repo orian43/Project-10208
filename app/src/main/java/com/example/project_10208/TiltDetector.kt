@@ -5,40 +5,50 @@ import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
-import kotlin.math.abs
 
-class TiltDetector(context: Context, private val onTilt: (Boolean) -> Unit) : SensorEventListener {
+
+interface TiltCallback {
+    fun onSensorEvent(x: Float, y: Float, z: Float)
+}
+
+
+class TiltDetector(context: Context, private val tiltCallback: TiltCallback) {
 
     private val sensorManager = context.getSystemService(Context.SENSOR_SERVICE) as SensorManager
     private val sensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
+    private lateinit var sensorEventListener: SensorEventListener
 
-    private var lastUpdate: Long = 0
-    private val MOVE_DELAY = 400L
-
-    fun start() {
-        sensorManager.registerListener(this, sensor, SensorManager.SENSOR_DELAY_GAME)
+    init {
+        initEventListener()
     }
 
-    fun stop() {
-        sensorManager.unregisterListener(this)
-    }
+    private fun initEventListener() {
+        sensorEventListener = object : SensorEventListener {
+            override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {}
 
-    override fun onSensorChanged(event: SensorEvent?) {
-        event?.let {
-            val x = it.values[0]
-            val currentTime = System.currentTimeMillis()
-
-            if (currentTime - lastUpdate > MOVE_DELAY) {
-                if (x > 3.0) {
-                    onTilt(false) // Left
-                    lastUpdate = currentTime
-                } else if (x < -3.0) {
-                    onTilt(true)
-                    lastUpdate = currentTime
-                }
+            override fun onSensorChanged(event: SensorEvent) {
+                val x = event.values[0]
+                val y = event.values[1]
+                val z = event.values[2]
+                // העברת הנתונים הגולמיים החוצה דרך הממשק
+                tiltCallback.onSensorEvent(x, y, z)
             }
         }
     }
 
-    override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {}
+    fun start() {
+        if (sensor != null) {
+            sensorManager.registerListener(
+                sensorEventListener,
+                sensor,
+                SensorManager.SENSOR_DELAY_NORMAL
+            )
+        }
+    }
+
+    fun stop() {
+        if (::sensorEventListener.isInitialized) {
+            sensorManager.unregisterListener(sensorEventListener)
+        }
+    }
 }

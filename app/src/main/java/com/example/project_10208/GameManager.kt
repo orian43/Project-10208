@@ -21,16 +21,19 @@ class GameManager(private val activity: AppCompatActivity) {
     private val coinController: CoinController
     private val scoreManager: ScoreManager
 
+
     private var tiltDetector: TiltDetector? = null
+    private var lastUpdate: Long = 0
+    private val MOVE_DELAY = 400L
+
     private var gameMode: String = GameConfig.MODE_BUTTONS
     private var gameSpeed: Long = GameConfig.SPEED_SLOW
-
-    private var lives = GameConfig.INITIAL_LIVES
     private var gameOver = false
 
     init {
 
         scoreManager = ScoreManager(activity)
+
 
         grid = Array(GameConfig.ROWS) { r ->
             Array(GameConfig.COLS) { c ->
@@ -43,6 +46,7 @@ class GameManager(private val activity: AppCompatActivity) {
             }
         }
 
+
         val playerCells = Array(GameConfig.COLS) { i ->
             val id = activity.resources.getIdentifier(
                 "linPlayerCell$i",
@@ -51,6 +55,7 @@ class GameManager(private val activity: AppCompatActivity) {
             )
             activity.findViewById<LinearLayout>(id)
         }
+
 
         playerController = PlayerController(activity, playerCells)
         meteorController = MeteorController(activity, grid)
@@ -69,6 +74,7 @@ class GameManager(private val activity: AppCompatActivity) {
 
         timer.setDelay(gameSpeed)
 
+
         ViewCompat.setOnApplyWindowInsetsListener(binding.main) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
@@ -80,20 +86,36 @@ class GameManager(private val activity: AppCompatActivity) {
 
     private fun setupControls() {
         if (gameMode == GameConfig.MODE_SENSORS) {
-            // Hiding the buttons
+            // Sensor Mode: Hiding Buttons and Enabling Sensor
             binding.btnLeft.visibility = View.INVISIBLE
             binding.btnRight.visibility = View.INVISIBLE
 
-            // Tilt detector initialization
-            tiltDetector = TiltDetector(activity) { isRight ->
-                if (isRight) movePlayerRight() else movePlayerLeft()
-            }
+            tiltDetector = TiltDetector(activity, object : TiltCallback {
+                override fun onSensorEvent(x: Float, y: Float, z: Float) {
+                    checkSensorLogic(x)
+                }
+            })
         } else {
-            // Normal button mode
+            // Button mode: Displaying buttons and defining clicks
             binding.btnLeft.visibility = View.VISIBLE
             binding.btnRight.visibility = View.VISIBLE
             binding.btnLeft.setOnClickListener { movePlayerLeft() }
             binding.btnRight.setOnClickListener { movePlayerRight() }
+        }
+    }
+
+
+    private fun checkSensorLogic(x: Float) {
+        val currentTime = System.currentTimeMillis()
+
+        if (currentTime - lastUpdate > MOVE_DELAY) {
+            if (x > 3.0) {
+                movePlayerLeft()
+                lastUpdate = currentTime
+            } else if (x < -3.0) {
+                movePlayerRight()
+                lastUpdate = currentTime
+            }
         }
     }
 
@@ -173,7 +195,6 @@ class GameManager(private val activity: AppCompatActivity) {
         }
     }
 
-
     private fun showGameOver() {
         gameOver = true
         stop()
@@ -181,7 +202,7 @@ class GameManager(private val activity: AppCompatActivity) {
         val finalDistance = distanceManager.getDistance()
         val finalCoins = coinController.getCoinsCount()
 
-        // Saving to the highscore table
+        // Saving data in the record table
         scoreManager.saveScore(finalDistance, finalCoins, 32.0853, 34.8854)
 
         binding.tvGameOver.visibility = View.VISIBLE
